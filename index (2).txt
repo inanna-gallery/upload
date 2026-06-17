@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download — Inanna Gallery</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #111;
+      min-height: 100vh;
+      padding: 60px 80px;
+    }
+
+    #header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 60px;
+    }
+
+    #title-block h1 {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    #title-block p {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    #visitor-count {
+      font-size: 11px;
+      color: #bbb;
+      letter-spacing: 0.08em;
+      text-align: right;
+    }
+
+    #writing-container {
+      max-width: 680px;
+    }
+
+    #writing {
+      font-size: 16px;
+      line-height: 1.9;
+      color: #111;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 200px;
+      outline: none;
+    }
+
+    #writing:empty::before {
+      content: attr(data-placeholder);
+      color: #ccc;
+      pointer-events: none;
+    }
+
+    mark {
+      background: rgba(255, 210, 50, 0.25);
+      border-radius: 2px;
+    }
+    mark.h2 { background: rgba(255, 210, 50, 0.45); }
+    mark.h3 { background: rgba(255, 185, 20, 0.62); }
+    mark.h4 { background: rgba(255, 140, 10, 0.75); }
+
+    #tree-corner {
+      position: fixed;
+      bottom: 40px;
+      right: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #tree-svg { width: 80px; height: 120px; }
+
+    #tree-label {
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    #click-count {
+      font-size: 10px;
+      color: #bbb;
+      margin-top: 2px;
+    }
+
+    #highlight-prompt {
+      position: fixed;
+      bottom: 40px;
+      left: 80px;
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #status {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      font-size: 10px;
+      color: #ccc;
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header">
+    <div id="title-block">
+      <h1>Download</h1>
+      <p>Inanna Gallery &nbsp;·&nbsp; Rochester, NY &nbsp;·&nbsp; June 28, 2026</p>
+    </div>
+    <div id="visitor-count"></div>
+  </div>
+
+  <div id="writing-container">
+    <div
+      id="writing"
+      contenteditable="true"
+      data-placeholder="..."
+    ></div>
+  </div>
+
+  <div id="tree-corner" onclick="handleTreeClick()">
+    <svg id="tree-svg" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="120" x2="40" y2="75" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="40" y1="90" x2="20" y2="72" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="40" y1="85" x2="58" y2="68" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+      <g id="layer1" style="opacity:0;transition:opacity 1s ease">
+        <line x1="40" y1="78" x2="22" y2="58" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="40" y1="75" x2="56" y2="56" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="20" y1="72" x2="10" y2="58" stroke="#bbb" stroke-width="1" stroke-linecap="round"/>
+      </g>
+      <g id="layer2" style="opacity:0;transition:opacity 1s ease">
+        <line x1="40" y1="72" x2="30" y2="50" stroke="#999" stroke-width="1" stroke-linecap="round"/>
+        <line x1="56" y1="68" x2="64" y2="52" stroke="#999" stroke-width="1" stroke-linecap="round"/>
+        <circle cx="10" cy="57" r="4" fill="#c8e6b0" opacity="0.7"/>
+        <circle cx="64" cy="51" r="4" fill="#c8e6b0" opacity="0.7"/>
+      </g>
+      <g id="layer3" style="opacity:0;transition:opacity 1s ease">
+        <line x1="30" y1="50" x2="22" y2="36" stroke="#888" stroke-width="1" stroke-linecap="round"/>
+        <line x1="30" y1="50" x2="38" y2="34" stroke="#888" stroke-width="1" stroke-linecap="round"/>
+        <circle cx="22" cy="35" r="5" fill="#a8d890" opacity="0.8"/>
+        <circle cx="38" cy="33" r="5" fill="#a8d890" opacity="0.8"/>
+        <circle cx="14" cy="43" r="4" fill="#b8e0a0" opacity="0.7"/>
+      </g>
+      <g id="layer4" style="opacity:0;transition:opacity 1s ease">
+        <line x1="22" y1="36" x2="16" y2="22" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="38" y1="34" x2="44" y2="20" stroke="#777" stroke-width="0.8" stroke-linecap="round"/>
+        <circle cx="16" cy="20" r="6" fill="#88cc70" opacity="0.85"/>
+        <circle cx="44" cy="18" r="6" fill="#88cc70" opacity="0.85"/>
+        <circle cx="70" cy="37" r="6" fill="#88cc70" opacity="0.8"/>
+      </g>
+      <g id="layer5" style="opacity:0;transition:opacity 1s ease">
+        <line x1="16" y1="22" x2="10" y2="10" stroke="#666" stroke-width="0.8" stroke-linecap="round"/>
+        <line x1="44" y1="20" x2="50" y2="8" stroke="#666" stroke-width="0.8" stroke-linecap="round"/>
+        <circle cx="10" cy="8" r="7" fill="#68bb50" opacity="0.9"/>
+        <circle cx="50" cy="6" r="7" fill="#68bb50" opacity="0.9"/>
+        <circle cx="28" cy="4" r="6" fill="#78c860" opacity="0.85"/>
+        <circle cx="62" cy="20" r="6" fill="#78c860" opacity="0.8"/>
+        <circle cx="4" cy="38" r="5" fill="#88cc70" opacity="0.75"/>
+      </g>
+    </svg>
+    <div id="tree-label">grow the tree</div>
+    <div id="click-count">0 offerings</div>
+  </div>
+
+  <div id="highlight-prompt">select any text to mark it</div>
+  <div id="status">connecting...</div>
+
+  <script>
+    // ─────────────────────────────────────────────────────
+    // REPLACE THESE TWO VALUES WITH YOUR OWN BEFORE UPLOADING
+    const API_KEY = '$2a$10$1mwOw1iGp5lsy09GRJ0MneRZNzJsgJNf3jpys8izecfkGtgiGbaA.';
+    const BIN_ID  = '6a3200f4f5f4af5e29fefc29';
+    // ─────────────────────────────────────────────────────
+
+    const BASE = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+    const READ_HEADERS  = { 'X-Master-Key': API_KEY };
+    const WRITE_HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' };
+
+    let state = { writing: '', treeClicks: 0 };
+    let saveTimer = null;
+    let lastWriting = '';
+    const writingEl = document.getElementById('writing');
+
+    // ── Load ─────────────────────────────────────────────
+    async function loadState() {
+      try {
+        const res = await fetch(BASE + '/latest', { headers: READ_HEADERS });
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        state = data.record;
+
+        // only update writing if it changed and user isn't actively typing
+        if (document.activeElement !== writingEl && state.writing !== lastWriting) {
+          writingEl.innerHTML = state.writing || '';
+          lastWriting = state.writing;
+        }
+
+        renderTree(state.treeClicks || 0);
+        document.getElementById('status').textContent = '';
+      } catch(e) {
+        document.getElementById('status').textContent = 'offline — ' + e.message;
+        console.error('Load failed:', e);
+      }
+    }
+
+    // ── Save ─────────────────────────────────────────────
+    async function saveState() {
+      try {
+        const res = await fetch(BASE, {
+          method: 'PUT',
+          headers: WRITE_HEADERS,
+          body: JSON.stringify(state)
+        });
+        if (!res.ok) throw new Error(res.status);
+        document.getElementById('status').textContent = '';
+      } catch(e) {
+        document.getElementById('status').textContent = 'save failed — ' + e.message;
+        console.error('Save failed:', e);
+      }
+    }
+
+    function scheduleSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveState, 1500);
+    }
+
+    // ── Writing ───────────────────────────────────────────
+    writingEl.addEventListener('input', () => {
+      state.writing = writingEl.innerHTML;
+      lastWriting = state.writing;
+      scheduleSave();
+    });
+
+    // ── Highlights ────────────────────────────────────────
+    document.addEventListener('mouseup', () => {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed) return;
+      const range = sel.getRangeAt(0);
+      if (!writingEl.contains(range.commonAncestorContainer)) return;
+
+      try {
+        const parent = range.commonAncestorContainer.parentElement;
+        if (parent && parent.tagName === 'MARK') {
+          const depth = Math.min((parseInt(parent.dataset.depth) || 1) + 1, 4);
+          parent.dataset.depth = depth;
+          parent.className = depth > 1 ? 'h' + depth : '';
+        } else {
+          const mark = document.createElement('mark');
+          mark.dataset.depth = '1';
+          range.surroundContents(mark);
+        }
+        sel.removeAllRanges();
+        state.writing = writingEl.innerHTML;
+        lastWriting = state.writing;
+        scheduleSave();
+      } catch(e) {
+        // partial cross-node selection — skip
+      }
+    });
+
+    // ── Tree ──────────────────────────────────────────────
+    function handleTreeClick() {
+      state.treeClicks = (state.treeClicks || 0) + 1;
+      renderTree(state.treeClicks);
+      scheduleSave();
+    }
+
+    function renderTree(clicks) {
+      document.getElementById('click-count').textContent =
+        clicks + (clicks === 1 ? ' offering' : ' offerings');
+      const thresholds = [1, 15, 40, 80, 150];
+      thresholds.forEach((t, i) => {
+        const prev = thresholds[i - 1] || 0;
+        const layer = document.getElementById('layer' + (i + 1));
+        if (!layer) return;
+        if (clicks >= t) {
+          layer.style.opacity = '1';
+        } else if (clicks > prev) {
+          layer.style.opacity = ((clicks - prev) / (t - prev)).toFixed(2);
+        } else {
+          layer.style.opacity = '0';
+        }
+      });
+    }
+
+    // ── Poll every 8 seconds for other visitors' changes ──
+    loadState();
+    setInterval(loadState, 8000);
+  </script>
+
+</body>
+</html>
